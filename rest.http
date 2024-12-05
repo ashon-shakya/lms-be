@@ -21,7 +21,11 @@ POST {{userAPI}}/login
 Content-Type: application/json
 
 {
+<<<<<<< HEAD
+    "email": "test@gmail.com",
+=======
     "email": "admin@gmail.com",
+>>>>>>> main
     "password": "123456"
 }
 

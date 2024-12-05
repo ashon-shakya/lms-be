@@ -11,7 +11,7 @@
   "keywords": [
     "lms"
   ],
-  "author": "ashon shakya",
+  "author": "Anil Khand",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
