@@ -61,7 +61,7 @@ const createBurrowRecord = async (req, res, next) => {
       };
       next(error);
     }
-    // book available condition
+
   } catch (error) {
     next(error);
   }
