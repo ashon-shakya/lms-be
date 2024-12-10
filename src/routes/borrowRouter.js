@@ -103,9 +103,8 @@ router.put("/return/:id", auth, async (req, res, next) => {
       returnedDate: new Date(),
     };
 
-    // update borrow data
     await updateABurrowById(id, updateData);
-    // update book data
+    
 
     const bookBurrowed = await updateABookById(borrowData.bookId, {
       isAvailable: true,
