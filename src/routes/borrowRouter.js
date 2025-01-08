@@ -1,73 +1,72 @@
 import express from "express";
-import { newBurrowValidation } from "../middlewares/joiValidation.js";
+import { newBorrowValidation } from "../middlewares/joiValidation.js";
 import { auth } from "../middlewares/authMiddleware.js";
 import {
-  getABurrowById,
-  getAllBurrows,
-  insertBurrow,
-  updateABurrowById,
+  getABorrowById,
+  getAllBorrows,
+  insertBorrow,
+  updateABorrowById,
 } from "../models/borrowHistory/BorrowModel.js";
 import { getABookById, updateABookById } from "../models/books/BookModel.js";
+import { createBorrowRecord } from "../controllers/borrowControllers.js";
 
-// Due date is 15 days from burrow date
-const DUE_DURATION = 15;
 const router = express.Router();
 
 // endpoints
 
-const createBurrowRecord = async (req, res, next) => {
-  try {
-    const { _id, name } = req.userInfo;
+// const createBorrowRecord = async (req, res, next) => {
+//   try {
+//     const { _id, name } = req.userInfo;
 
-    const { bookId, bookTitle, thumbnail } = req.body;
+//     const { bookId, bookTitle, thumbnail } = req.body;
 
-    const dueDate = new Date(+new Date() + DUE_DURATION * 24 * 60 * 60 * 1000);
+//     const dueDate = new Date(+new Date() + DUE_DURATION * 24 * 60 * 60 * 1000);
 
-    const bookDatat = await getABookById(bookId);
+//     const bookDatat = await getABookById(bookId);
 
-    if (bookDatat) {
-      if (bookDatat.isAvailable) {
-        const obj = {
-          userId: _id,
-          bookId,
-          bookTitle,
-          thumbnail,
-          dueDate,
-        };
-        const burrow = await insertBurrow(obj);
+//     if (bookDatat) {
+//       if (bookDatat.isAvailable) {
+//         const obj = {
+//           userId: _id,
+//           bookId,
+//           bookTitle,
+//           thumbnail,
+//           dueDate,
+//         };
+//         const borrow = await insertBorrow(obj);
 
-        if (burrow) {
-          const bookBurrowed = await updateABookById(bookId, {
-            isAvailable: false,
-            expectedAvailable: dueDate,
-          });
+//         if (borrow) {
+//           const bookBorrowed = await updateABookById(bookId, {
+//             isAvailable: false,
+//             expectedAvailable: dueDate,
+//           });
 
-          return res.json({
-            status: "success",
-            message: "Book Borrowed Successfully",
-          });
-        }
-      } else {
-        const error = {
-          status: 404,
-          message: "Book already borrowed",
-        };
-        next(error);
-      }
-    } else {
-      const error = {
-        status: 404,
-        message: "Book not found",
-      };
-      next(error);
-    }
+//           return res.json({
+//             status: "success",
+//             message: "Book Borrowed Successfully",
+//           });
+//         }
+//       } else {
+//         const error = {
+//           status: 404,
+//           message: "Book already borrowed",
+//         };
+//         next(error);
+//       }
+//     } else {
+//       const error = {
+//         status: 404,
+//         message: "Book not found",
+//       };
+//       next(error);
+//     }
+//     // book available condition
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
-  } catch (error) {
-    next(error);
-  }
-};
-
-router.post("/", auth, newBurrowValidation, createBurrowRecord);
+router.post("/", auth, newBorrowValidation, createBorrowRecord);
 
 router.get("/", auth, async (req, res, next) => {
   // get user id
@@ -78,7 +77,7 @@ router.get("/", auth, async (req, res, next) => {
   const filter = {
     userId: _id,
   };
-  const borrows = await getAllBurrows(filter);
+  const borrows = await getAllBorrows(filter);
 
   return res.json({
     status: "success",
@@ -93,9 +92,8 @@ router.put("/return/:id", auth, async (req, res, next) => {
   const { id } = req.params;
   const userId = req.userInfo._id;
 
-  const borrowData = await getABurrowById(id);
-  console.log(userId.toString());
-  console.log(borrowData.userId.toString());
+  const borrowData = await getABorrowById(id);
+
   if (userId.toString() == borrowData.userId.toString()) {
     console.log("INSIDE CHECK");
     const updateData = {
@@ -103,10 +101,11 @@ router.put("/return/:id", auth, async (req, res, next) => {
       returnedDate: new Date(),
     };
 
-    await updateABurrowById(id, updateData);
-    
+    // update borrow data
+    await updateABorrowById(id, updateData);
+    // update book data
 
-    const bookBurrowed = await updateABookById(borrowData.bookId, {
+    const bookBorrowed = await updateABookById(borrowData.bookId, {
       isAvailable: true,
     });
 
