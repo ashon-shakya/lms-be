@@ -1,4 +1,4 @@
-@rootURL = http://localhost:8000
+@rootURL = http://localhost:3000
 @apiEP = {{rootURL}}/api/v1
 @userAPI = {{apiEP}}/users
 @bookAPI = {{apiEP}}/books
