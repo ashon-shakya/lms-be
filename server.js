@@ -69,5 +69,6 @@ connectMongoDB()
     });
   })
   .catch((error) => {
+    console.log("mongo url", config.mongodb.url);
     console.log("Error connecting to Database");
   });
