@@ -1,3 +1,3 @@
 # Libray Management System (LMS) API
 
-Backend service for LMS
+Backend API service for LMS
