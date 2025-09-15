@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22 # Or your preferred Node.js LTS version
+    commands:
+      - echo "Installing dependencies..."
+      - npm install # Using npm is standard; use 'yarn install' if you have a yarn.lock
+
+  build:
+    commands:
+      - echo "Build phase started on `date`"
+      # Add any build-specific commands here (e.g., npm run test, tsc for TypeScript)
+
+  post_build:
+    commands:
+      - echo "Creating the deployment package..."
+      # This zips up your code and the installed node_modules for Lambda
+      - zip -r deployment_package.zip .
+
+artifacts:
+  files:
+    # This specifically targets the .zip file for deployment
+    - deployment_package.zip
