@@ -4,7 +4,7 @@ phases:
     commands:
       - AWS_REGION=us-east-1
       - AWS_ACCOUNT_ID=021891580796
-      - ECS_CONTAINER=lms-cluster
+      - ECS_CONTAINER=lms-be-container
       - DOCKER_IMAGE_NAME=lms-be-image
       - echo Logging in to Amazon ECR....
       - aws --version
