@@ -36,7 +36,7 @@ app.use("/api/v1/reviews", reviewRouter);
 // default response
 app.get("/", (req, res) => {
   res.json({
-    message: "server is live",
+    message: "Welcom to LMS server!!!",
   });
 });
 
